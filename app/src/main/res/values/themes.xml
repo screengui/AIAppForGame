@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      The UI is entirely Compose; this theme only controls the window background and system bars so
+      there is no light flash before the first composition.
+    -->
+    <style name="Theme.GameAgent" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/ga_background</item>
+        <item name="android:statusBarColor">@color/ga_background</item>
+        <item name="android:navigationBarColor">@color/ga_background</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:colorBackground">@color/ga_background</item>
+        <item name="android:textColorPrimary">@color/ga_text_primary</item>
+    </style>
+</resources>

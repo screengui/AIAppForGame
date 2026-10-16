@@ -1,0 +1,97 @@
+# Continuous integration for the GameAgent Android companion.
+#
+# What this workflow proves on every push:
+#   * the JVM logic in :core still passes its unit tests,
+#   * the Android logic in :app still passes its unit tests,
+#   * Android lint is clean for both modules,
+#   * a debug APK and an androidTest APK can actually be built,
+#   * the debug APK is uploaded so it can be downloaded and installed from a phone.
+#
+# What it deliberately does NOT do: run instrumented tests. GitHub-hosted runners have no Android
+# device and the project does not use an emulator in CI, so `connectedDebugAndroidTest` is a local
+# step (see README.md, "Running the device smoke test"). It also never signs anything: no signing
+# key, password or keystore exists in this repository.
+
+name: Android CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# Least privilege: this workflow only reads the repository.
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Test, lint and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      # Actions are pinned to reviewed releases by full commit SHA. The comment records the tag the
+      # SHA corresponds to, so the pin can be audited and bumped deliberately.
+      - name: Check out the repository
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      # Installs the Android SDK, writes the Gradle cache configuration and enables dependency
+      # caching for the `gradle` user home. The AGP version in gradle/libs.versions.toml determines
+      # the SDK platform that is downloaded, so nothing here needs to repeat it.
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c # v5.0.2
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+
+      # :core is a plain Kotlin/JVM module, so its tests need no Android runtime at all.
+      # :app tests are `src/test` (JVM, Robolectric-free) - see CONTRIBUTING.md.
+      - name: Run unit tests
+        run: ./gradlew :core:test :app:testDebugUnitTest --console=plain --stacktrace
+
+      # :core declares com.android.lint so its sources are analysed rather than skipped as an
+      # opaque jar. lint.abortOnError is true in app/build.gradle.kts, so warnings that matter fail
+      # the build instead of scrolling past.
+      - name: Run Android lint
+        run: ./gradlew :core:lint :app:lintDebug --console=plain --stacktrace
+
+      # assembleDebugAndroidTest compiles the instrumented test sources. This is the only CI-side
+      # check that the androidTest source set still compiles; it is not executed without a device.
+      - name: Build debug APK and compile instrumented tests
+        run: ./gradlew :app:assembleDebug :app:assembleDebugAndroidTest --console=plain --stacktrace
+
+      # Reports are uploaded even when an earlier step failed, so a red build still produces
+      # something diagnosable.
+      - name: Upload lint and test reports
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: reports
+          if-no-files-found: ignore
+          retention-days: 14
+          path: |
+            app/build/reports/lint-results-debug.html
+            app/build/reports/tests/testDebugUnitTest/**
+            core/build/reports/lint-results.html
+            core/build/reports/tests/test/**
+            app/build/reports/androidTests/**
+
+      # The installable artifact. Download it from the workflow run page on the phone, then install
+      # it with the phone's own file manager (see README.md, "Installing the APK from a phone").
+      - name: Upload debug APK
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: gameagent-debug-apk
+          if-no-files-found: error
+          retention-days: 30
+          path: app/build/outputs/apk/debug/app-debug.apk

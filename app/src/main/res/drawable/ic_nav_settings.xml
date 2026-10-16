@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sliders: settings. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M3,7 L21,7 L21,9.4 L3,9.4 Z M3,14.6 L21,14.6 L21,17 L3,17 Z M6.4,4.6 L8.8,4.6 L8.8,11.8 L6.4,11.8 Z M15.2,12.2 L17.6,12.2 L17.6,19.4 L15.2,19.4 Z" />
+</vector>

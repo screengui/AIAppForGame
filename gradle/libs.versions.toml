@@ -1,0 +1,61 @@
+####
+# Version catalog for the GameAgent Android AI companion.
+#
+# The versions below are pinned to a mutually compatible, stable set:
+#   Gradle 8.14.6  <->  Android Gradle Plugin 8.13.2  <->  Kotlin 2.3.21  <->  JDK 17
+#
+# AndroidX is deliberately held at the newest wave that still compiles against `compileSdk = 36`.
+# Later releases (core-ktx 1.18+, lifecycle 2.10+, activity 1.12+, compose BOM 2025.11+) are built
+# against android-37 and refuse to be consumed by AGP 8.x, which caps out at compileSdk 36. Moving
+# this project to those versions means moving AGP to 9.x and Gradle to 9.x in the same commit.
+# See docs/BUILD.md for the compatibility matrix and how to move it forward.
+####
+
+[versions]
+agp = "8.13.2"
+kotlin = "2.3.21"
+
+# AndroidX - newest stable releases compatible with compileSdk 36 / AGP 8.13.2.
+coreKtx = "1.17.0"
+lifecycle = "2.9.4"
+activityCompose = "1.11.0"
+composeBom = "2025.09.01"
+
+# Kotlin ecosystem
+coroutines = "1.11.0"
+
+# Test
+junit4 = "4.13.2"
+kotlinTest = "2.3.21"
+androidxTestExtJunit = "1.3.0"
+androidxTestRunner = "1.7.0"
+androidxTestEspresso = "3.7.0"
+
+[libraries]
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
+androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+compose-ui = { module = "androidx.compose.ui:ui" }
+compose-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+compose-material3 = { module = "androidx.compose.material3:material3" }
+
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+
+junit4 = { module = "junit:junit", version.ref = "junit4" }
+kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlinTest" }
+androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidxTestExtJunit" }
+androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidxTestRunner" }
+androidx-test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidxTestEspresso" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

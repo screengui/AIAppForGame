@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Deliberately minimal accessibility configuration.
+
+  canPerformGestures="true"          : the only capability the controller uses.
+  canRetrieveWindowContent="false"   : the service never reads screen content or view hierarchies;
+                                       perception works from captured pixels instead.
+  isAccessibilityTool="false"        : honest declaration. This is an automation/companion tool,
+                                       not an assistive technology, and Android 14+ surfaces that
+                                       distinction to the user instead of letting an app claim it.
+  accessibilityEventTypes           : window state changes only, and the service ignores them; the
+                                       attribute is required for the service to be selectable.
+-->
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="UnusedAttribute"
+    android:accessibilityEventTypes="typeWindowStateChanged"
+    android:accessibilityFeedbackType="feedbackGeneric"
+    android:accessibilityFlags="flagDefault"
+    android:canPerformGestures="true"
+    android:canRetrieveWindowContent="false"
+    android:description="@string/accessibility_service_description"
+    android:isAccessibilityTool="false"
+    android:notificationTimeout="100"
+    android:summary="@string/accessibility_service_summary" />

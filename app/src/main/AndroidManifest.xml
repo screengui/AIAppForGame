@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+      Permissions are declared only where a feature genuinely needs them.
+
+      INTERNET / ACCESS_NETWORK_STATE : only for the *optional* cloud vision provider. The app is
+                                        fully functional with an empty provider configuration.
+      FOREGROUND_SERVICE              : required from API 28 for any foreground service.
+      FOREGROUND_SERVICE_MEDIA_PROJECTION : required from API 34 for a foreground service of type
+                                        "mediaProjection".
+      POST_NOTIFICATIONS              : required from API 33 to show the ongoing capture
+                                        notification that Android mandates for a projection.
+
+      Nothing here grants access to other apps. Screen capture additionally requires the user to
+      approve a system consent dialog, and touching other apps requires the user to enable the
+      accessibility service manually in system settings.
+    -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!--
+      allowBackup is false, which on Android 12+ turns off cloud backup and device transfer for this
+      app outright, so no separate dataExtractionRules resource is needed (hence the lint ignore).
+    -->
+    <application
+        android:name=".GameAgentApplication"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.GameAgent"
+        android:usesCleartextTraffic="false"
+        tools:ignore="DataExtractionRules">
+
+        <activity
+            android:name=".ui.MainActivity"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|density|uiMode"
+            android:exported="true"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--
+          Started only after the user approves the system screen-capture dialog, and promoted to a
+          foreground service BEFORE MediaProjectionManager.getMediaProjection() is called, which is
+          what Android 14+ requires.
+        -->
+        <service
+            android:name=".capture.ScreenCaptureService"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection" />
+
+        <!--
+          Optional gesture-injection controller. It is inactive until the user enables it in
+          Android Settings, it is visible in the system's list of accessibility services, and it
+          never reads window content (canRetrieveWindowContent="false").
+        -->
+        <service
+            android:name=".input.GameAgentAccessibilityService"
+            android:exported="true"
+            android:label="@string/accessibility_service_label"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config" />
+        </service>
+    </application>
+</manifest>

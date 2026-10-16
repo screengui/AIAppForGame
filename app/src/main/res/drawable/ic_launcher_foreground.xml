@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A capture reticle: the app's purpose in one glyph. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Outer ring -->
+    <path
+        android:fillColor="#FF62D0FF"
+        android:pathData="M54,30 a24,24 0 1,0 0.01,0 z M54,36 a18,18 0 1,1 -0.01,0 z" />
+
+    <!-- Crosshair ticks -->
+    <path
+        android:fillColor="#FF62D0FF"
+        android:pathData="M52,20 h4 v10 h-4 z M52,78 h4 v10 h-4 z M20,52 h10 v4 h-10 z M78,52 h10 v4 h-10 z" />
+
+    <!-- Centre dot -->
+    <path
+        android:fillColor="#FF4ADE80"
+        android:pathData="M54,46 a8,8 0 1,0 0.01,0 z" />
+</vector>

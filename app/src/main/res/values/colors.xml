@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ga_background">#FF0B0E14</color>
+    <color name="ga_text_primary">#FFE6EAF2</color>
+    <color name="ga_icon_background">#FF0B0E14</color>
+</resources>

@@ -1,0 +1,38 @@
+# --- Gradle / build output ---
+.gradle/
+build/
+*/build/
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+.gradle-cache/
+
+# --- Android artifacts ---
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+output.json
+
+# --- IDE ---
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.DS_Store
+
+# --- Secrets: never commit keys, tokens or env files ---
+*.jks
+*.keystore
+keystore.properties
+.env
+.env.*
+!.env.example
+secrets.properties
+
+# --- Local tooling ---
+.tools/
+*.log

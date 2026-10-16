@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Adaptive launcher icon.
+
+  The -v26 qualifier is required even though minSdk is 26: AAPT2 refuses to link an <adaptive-icon>
+  element from a folder whose configuration is not at API 26 or higher, so dropping the qualifier
+  breaks resource linking outright. (Lint's ObsoleteSdkInt suggests merging this folder into
+  mipmap-anydpi; that suggestion does not build here, and is left as a warning.)
+
+  The monochrome layer is the same reticle: Android tints it for themed icons on API 33+ and ignores
+  it on older releases.
+-->
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@color/ga_icon_background" />
+    <foreground android:drawable="@drawable/ic_launcher_foreground" />
+    <monochrome android:drawable="@drawable/ic_launcher_foreground" />
+</adaptive-icon>

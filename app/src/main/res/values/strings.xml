@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GameAgent</string>
+
+    <string name="accessibility_service_label">GameAgent input controller</string>
+    <string name="accessibility_service_summary">Sends taps and swipes produced by the GameAgent companion app</string>
+    <string name="accessibility_service_description">
+        GameAgent uses this service only to deliver taps and swipes that its own decision pipeline
+        has produced and validated. Enable it only if you want the companion app to be able to
+        interact with other apps\u0027 screens. The service never reads on-screen text and never
+        inspects other apps\u0027 content.
+    </string>
+
+    <string name="notification_channel_capture">Screen capture</string>
+    <string name="notification_channel_capture_description">Shown while GameAgent is capturing the screen</string>
+    <string name="notification_capture_title">Screen capture active</string>
+    <string name="notification_capture_text">GameAgent is capturing the screen. Tap to open the dashboard.</string>
+    <string name="notification_action_stop">Stop capture</string>
+
+    <!-- Bottom navigation labels. Kept in resources so the content descriptions used by
+         TalkBack come from the same place as the visible labels. -->
+    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_test">Test</string>
+    <string name="nav_diagnostics">Diagnostics</string>
+    <string name="nav_settings">Settings</string>
+</resources>
